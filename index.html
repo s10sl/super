@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>S10 Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- ================= Sidebar ================= -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+
+            <i class="fa-solid fa-users"></i>
+
+            <h2>S10 Portal</h2>
+
+        </div>
+
+        <div class="menu">
+
+<div class="menu-item active" onclick="showPage('employee', this)">
+    <i class="fa-solid fa-user-group"></i>
+    S10 CS
+</div>
+
+<div class="menu-item" onclick="showPage('links', this)">
+    <i class="fa-solid fa-link"></i>
+    BO Links 
+</div>
+
+<div class="menu-item" onclick="showPage('deposit',this)">
+    <i class="fa-solid fa-money-bill-transfer"></i>
+    DEPOSIT PLY & SheetS
+</div>
+
+<div class="menu-item" onclick="showPage('SOP',this)">
+    <i class="fa-solid fa-book"></i>
+    S10 TG & Live chat SOP
+</div>
+
+<div class="menu-item" onclick="showPage('Sports', this)">
+    <i class="fa-solid fa-futbol"></i>
+    Sports
+</div>
+
+<div class="menu-item" onclick="showPage('Other',this)"> 
+    <i class="fa-solid fa-folder-open"></i> 
+      Important Sheet 
+</div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= Main Content ================= -->
+
+    <div class="content">
+
+        <!-- ================= Employee Page ================= -->
+
+        <div id="employeePage">
+
+            <div class="topbar">
+
+                <h1>CS DETAILS</h1>
+
+            </div>
+
+            <div class="search-box">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input type="text" id="search" placeholder="Search Name...">
+
+            </div>
+
+            <div class="employee-list" id="employeeList"></div>
+
+            <div class="profile-card FN">
+
+                <div class="profile-header">
+
+                    <div class="avatar" id="avatar">A</div>
+
+                    <div>
+
+                        <h2 id="empName">Select Employee</h2>
+
+                        <p id="empPosition">Staff Position</p>
+
+                    </div>
+
+                </div>
+
+                <div class="info-grid">
+
+                    <div class="box">
+                        <span>PSD ID</span>
+                        <h3 id="psd">-</h3>
+                    </div>
+
+                    <div class="box">
+                        <span>Office</span>
+                        <h3 id="office">-</h3>
+                    </div>
+
+                    <div class="box">
+                        <span>MS Team ID</span>
+                        <h3 id="teamid">-</h3>
+                    </div>
+
+                    <div class="box group-box">
+                        <span>ICX Agent</span>
+                        <h3 id="agent">-</h3>
+                    </div>
+
+                    <div class="box">
+                        <span>Group</span>
+                        <h3 id="group">-</h3>
+                    </div>
+
+                </div>
+
+                <h2 class="title">Brand UID</h2>
+
+                <div class="brand-grid">
+
+                    <div class="brand-card" id="superbo" data-title="SUPER BO"></div>
+
+                    <div class="brand-card" id="dp" data-title="DP"></div>
+
+                    <div class="brand-card" id="kv" data-title="KV"></div>
+
+                    <div class="brand-card" id="hb" data-title="HB"></div>
+
+                    <div class="brand-card" id="jb" data-title="JB"></div>
+
+                    <div class="brand-card" id="jway" data-title="JWAY"></div>
+
+                    <div class="brand-card" id="sb" data-title="SB"></div>
+
+                    <div class="brand-card" id="slb" data-title="SLB"></div>
+
+                    <div class="brand-card" id="bjdb" data-title="BJDB"></div>
+
+                    <div class="brand-card" id="bn" data-title="BN"></div>
+
+                    <div class="brand-card" id="bdvegas" data-title="BDVEGAS"></div>
+
+                    <div class="brand-card" id="cpc88" data-title="CPC88"></div>
+
+                    <div class="brand-card" id="deshi777" data-title="DESHI777"></div>
+
+                </div>
+
+<div class="profile-card">
+    <h2>Mistakes</h2>
+
+    <div id="mistakeContainer"></div>
+</div>
+
+
+            </div>
+
+        </div>
+
+        <!-- ================= BO Links ================= -->
+
+        <div id="linksPage" style="display:none;">
+
+            <div class="topbar">
+
+                <h1>ALL BO LINKS</h1>
+
+            </div>
+
+            <div class="profile-card FN">
+
+    <h2>Useful Links</h2>
+
+    <br>
+
+    <div id="boLinks" class="brand-grid"></div>
+
+</div>
+</div>
+
+<!-- ================= Deposit PLY ================= -->
+
+<div id="depositPage" style="display:none;">
+
+    <div class="topbar">
+        <h1>DEPOSIT PLY & SheetS</h1>
+    </div>
+
+    <div class="profile-card FN">
+
+        <h2>Deposit PLY</h2>
+        <div id="depositPlyLinks" class="brand-grid"></div>
+
+        <h2 style="margin-top:30px;">Deposit Sheets</h2>
+        <div id="depositSheetLinks" class="brand-grid"></div>
+
+    </div>
+
+</div>
+
+<!-- ================= SOP ================= -->
+
+<div id="SOPPage" style="display:none;">
+
+    <div class="topbar">
+        <h1>SOP DETAILS</h1>
+    </div>
+
+    <div class="profile-card FN">
+
+        <h2>Chat SOP</h2>
+
+        <br>
+
+        <div id="sopLinks" class="brand-grid"></div>
+
+    </div>
+
+</div>
+<!-- ================= SPORTS ================= -->
+
+<div id="SportsPage" style="display:none;">
+
+    <div class="topbar">
+        <h1>SPORTS DETAILS</h1>
+    </div>
+
+    <div class="profile-card FN">
+
+        <h2>Sports BO</h2>
+        <div id="sportsBoLinks" class="brand-grid"></div>
+
+        <h2 style="margin-top:30px;">Sports Game</h2>
+        <div id="sportsGameLinks" class="brand-grid"></div>
+
+    </div>
+
+</div>
+
+<!-- ================= Other ================= -->
+
+<div id="OtherPage" style="display:none;">
+
+    <div class="topbar">
+        <h1>Other Sheet</h1>
+    </div>
+
+    <div class="profile-card FN">
+
+        <h2>Sheet</h2>
+
+        <br>
+
+        <div id="otherLinks" class="brand-grid"></div>
+
+    </div>
+
+</div>
+
+</div> <!-- content -->
+</div> <!-- container -->
+
+<script src="script.js"></script>
+
+</body>
+</html>

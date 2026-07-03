@@ -1,0 +1,834 @@
+/* ====================================
+   S10 Employee Dashboard
+==================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#eef3fb;
+}
+
+/* ================= Layout ================= */
+
+.container{
+    display:flex;
+    height:100vh;
+}
+
+/* ================= Sidebar ================= */
+
+.sidebar{
+    width:300px;
+    background:#16469d;
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+    padding:20px;
+    overflow-y:auto;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:25px;
+
+}
+
+.logo i{
+    font-size:30px;
+}
+
+.logo h2{
+    font-size:24px;
+    font-weight:600;
+}
+
+/* ================= Menu ================= */
+
+.menu{
+    margin-bottom:20px;
+}
+
+.menu-item{
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    padding:15px;
+    border-radius:10px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    margin-bottom:8px;
+
+    font-size:16px;
+
+}
+
+.menu-item:hover{
+
+    background:#1565c0;
+
+}
+
+.menu-item.active{
+
+    background:#08367e;
+
+}
+
+.menu-item i{
+
+    width:22px;
+    text-align:center;
+
+}
+
+/* ================= Search ================= */
+
+.search-box{
+
+    position:relative;
+
+    margin-bottom:20px;
+
+}
+
+.search-box input{
+
+    width:100%;
+
+    border:none;
+
+    outline:none;
+
+    border-radius:12px;
+
+    padding:12px 15px 12px 42px;
+
+    font-size:15px;
+
+}
+
+.search-box i{
+
+    position:absolute;
+
+    left:15px;
+
+    top:14px;
+
+    color:#777;
+
+}
+
+/* ================= Employee List ================= */
+
+.employee-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+}
+
+.employee{
+
+    background:#fff;
+
+    color:#222;
+
+    border-radius:12px;
+
+    padding:15px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.10);
+
+}
+
+.employee:hover{
+
+    background:#e8f2ff;
+
+    transform:translateX(5px);
+
+}
+
+.employee h4{
+
+    font-size:15px;
+
+    margin-bottom:5px;
+
+}
+
+.employee p{
+
+    color:#777;
+
+    font-size:13px;
+
+}
+
+/* ================= Right Content ================= */
+
+.content{
+
+    flex:1;
+
+    padding:30px;
+
+    overflow:auto;
+
+}
+
+.topbar{
+
+    text-align:center;
+
+    margin-bottom:25px;
+
+}
+
+.topbar h1{
+
+    color:#0d47a1;
+
+    font-size:30px;
+
+}
+
+/* ================= Profile ================= */
+
+.profile-card{
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:30px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+
+}
+
+.profile-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+    margin-bottom:30px;
+
+}
+
+.avatar{
+
+    width:90px;
+
+    height:90px;
+
+    border-radius:50%;
+
+    background:#0d47a1;
+
+    color:#fff;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:34px;
+
+    font-weight:bold;
+
+}
+
+.profile-header h2{
+
+    font-size:28px;
+
+}
+
+.profile-header p{
+
+    color:#777;
+
+}
+
+/* ================= Info ================= */
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+}
+
+.group-box{
+    grid-column:1 / 2;
+}
+
+
+.box{
+
+    background:#f7f9fc;
+
+    border-left:5px solid #0d47a1;
+
+    border-radius:15px;
+
+    padding:18px;
+
+}
+
+.box span{
+
+    color:#777;
+
+    font-size:13px;
+
+}
+
+.box h3{
+
+    margin-top:8px;
+
+    color:#0d47a1;
+
+    font-size:20px;
+
+}
+
+/* ================= Brand ================= */
+
+.title{
+
+    color:#0d47a1;
+
+    margin-bottom:15px;
+
+}
+
+.brand-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+
+    gap:15px;
+
+}
+
+.brand-card{
+
+    background:#fff;
+
+    border-radius:15px;
+
+    padding:15px;
+
+    min-height:110px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+    transition:.3s;
+
+}
+
+.brand-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 6px 20px rgba(0,0,0,.12);
+
+}
+
+.brand-name{
+
+    font-size:17px;
+
+    font-weight:700;
+
+    color:#0d47a1;
+
+    margin-bottom:8px;
+
+}
+
+.brand-value{
+
+    font-size:18px;
+
+    font-weight:500;
+
+    word-break:break-word;
+
+}
+
+.active-brand{
+
+    border:2px solid #15c54a;
+
+    background:#edfff2;
+
+}
+
+.inactive-brand{
+
+    border:2px solid #ff4d4d;
+
+    background:#fff5f5;
+
+}
+
+/* ================= Links ================= */
+
+.link-card{
+
+    padding:18px;
+
+    border-radius:12px;
+
+    margin-bottom:15px;
+
+    transition:.3s;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
+
+}
+
+.link-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
+
+}
+
+/* Colors */
+.FN{background:#c1e5e7;}
+.GEINE{background:#1976D2;}
+.Super{background:#cf0067;}
+.Extension{background:#0620f2;}
+.Darazplay{background:#07982f;}
+.KV8{background:#5d2b08;}
+.Heybaji{background:#0075cf;}
+.Jeetbangla{background:#ee863d;}
+.Jeetway{background:#292e34;}
+.Superbaji{background:#2f5580;}
+.SBJ66{background:#146067;}
+.BetJDB{background:#c9883c;}
+.BN88{background:#689F38;}
+.BDVegas{background:#470478;}
+.CPC88{background:#146067;}
+.Deshi777{background:#8E24AA;}
+.BetVisa{background:#0288D1;}
+.Wicket{background:#ff871a;}
+.Velki{background:#6D4C41;}
+.Saba{background:#455A64;}
+.Microsoft{background:#001776;}
+.Outlook{background:#8E24AA;}
+.Agent{background:#039BE5;}
+.V{background:#43A047;}
+
+.link-card a{
+
+    color:#fff;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    font-size:16px;
+
+    display:block;
+
+}
+
+.LCSOP{background:#1976D2;}
+.TGSOP{background:#146067;}
+
+.foot{background:#1976D2;}
+.cric{background:#146067;}
+
+
+/* ================= Responsive ================= */
+
+@media(max-width:900px){
+
+.container{
+
+    flex-direction:column;
+
+}
+
+.sidebar{
+
+    width:100%;
+    height:auto;
+
+}
+
+.content{
+
+    padding:15px;
+
+}
+
+.profile-header{
+
+    flex-direction:column;
+
+    text-align:center;
+
+}
+
+}
+
+#employeePage,
+#linksPage,
+#depositPage,
+#SOPPage{
+    width:100%;
+}
+
+
+#mistakeContainer{
+    max-width:1100px;
+    margin:auto;
+}
+
+.mistake-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.month-badge{
+    background:#dff8ea;
+    color:#1c9c63;
+    padding:10px 18px;
+    border-radius:25px;
+    font-weight:600;
+}
+
+.mistake-card{
+
+    background:#fff;
+    border-radius:18px;
+    padding:25px;
+    margin-bottom:20px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+
+    border-left:7px solid;
+}
+
+.mistake-card.red{
+    border-color:#ff3d57;
+}
+
+.mistake-card.orange{
+    border-color:#ff9800;
+}
+
+.mistake-card.green{
+    border-color:#00b96b;
+}
+
+.mistake-card.blue{
+    border-color:#3f7cff;
+}
+
+.mistake-card.purple{
+    border-color:#8e5cf7;
+}
+
+.card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.subject{
+    padding:8px 18px;
+    border-radius:20px;
+    font-weight:600;
+}
+
+.subject.red{
+    background:#ffe9ec;
+    color:#ff3d57;
+}
+
+.subject.orange{
+    background:#fff2dd;
+    color:#ff9800;
+}
+
+.subject.green{
+    background:#e5fff2;
+    color:#00a35f;
+}
+
+.subject.blue{
+    background:#e8f0ff;
+    color:#2d6bff;
+}
+
+.subject.purple{
+    background:#f2ebff;
+    color:#8e5cf7;
+}
+
+.date{
+    background:#f7f7f7;
+    padding:8px 14px;
+    border-radius:15px;
+    font-weight:600;
+}
+
+.remarks{
+    line-height:1.7;
+}
+
+.link a{
+    color:#246bff;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.end-list{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    color:#777;
+    margin-top:25px;
+}
+
+.end-list hr{
+    flex:1;
+}
+
+.date{
+    padding:8px 15px;
+    border-radius:18px;
+    font-weight:600;
+}
+
+.date.red{
+    background:#ffe9ec;
+    color:#ff3d57;
+}
+
+.date.orange{
+    background:#fff2dd;
+    color:#ff9800;
+}
+
+.date.green{
+    background:#e5fff2;
+    color:#00a35f;
+}
+
+.date.blue{
+    background:#e8f0ff;
+    color:#2d6bff;
+}
+
+.date.purple{
+    background:#f2ebff;
+    color:#8e5cf7;
+}
+
+
+------------MISTAKE COLOR--------
+
+/* Wrong Information */
+.mistake-card.wrong-information{
+    border-left-color:#ff151f;
+}
+
+.subject.wrong-information,
+.date.wrong-information{
+    background:#ffe8ea;
+    color:#ff151f;
+}
+
+/* Not Follow SOP */
+.mistake-card.not-follow-sop{
+    border-left-color:#e3686d;
+}
+
+.subject.not-follow-sop,
+.date.not-follow-sop{
+    background:#ffecee;
+    color:#e3686d;
+}
+
+/* Late Reply */
+.mistake-card.late-reply{
+    border-left-color:#febabd;
+}
+
+.subject.late-reply,
+.date.late-reply{
+    background:#fff5f5;
+    color:#d46d74;
+}
+
+/* No Reply */
+.mistake-card.no-reply{
+    border-left-color:#a889d2;
+}
+
+.subject.no-reply,
+.date.no-reply{
+    background:#f3efff;
+    color:#7c5ac7;
+}
+
+/* Angry With Player */
+.mistake-card.angry-player{
+    border-left-color:#e3056a;
+}
+
+.subject.angry-player,
+.date.angry-player{
+    background:#ffe5f0;
+    color:#e3056a;
+}
+
+/* Non Professional*/
+.mistake-card.non-professional{
+    border-left-color:#ff151f;
+}
+
+.subject.non-professional,
+.date.non-professional{
+    background:#ffe8ea;
+    color:#ff151f;
+}
+
+/* No solution */
+.mistake-card.no-solution{
+    border-left-color:#e3686d;
+}
+
+.subject.no-solution,
+.date.no-solution{
+    background:#ffecee;
+    color:#e3686d;
+}
+
+/* No explanation */
+.mistake-card.no-explanation{
+    border-left-color:#febabd;
+}
+
+.subject.no-explanation,
+.date.no-explanation{
+    background:#fff5f5;
+    color:#d46d74;
+}
+
+/* Verbal warning*/
+.mistake-card.verbal-warning{
+    border-left-color:#a889d2;
+}
+
+.subject.verbal-warning,
+.date.verbal-warning{
+    background:#f3efff;
+    color:#7c5ac7;
+}
+
+/* Warning letter*/
+.mistake-card.warning-letter{
+    border-left-color:#e3056a;
+}
+
+.subject.warning-letter,
+.date.warning-letter{
+    background:#ffe5f0;
+    color:#e3056a;
+}
+
+
+/* ================= Other ================= */
+.birthday,
+.promo,
+.otp,
+.failure,
+.PGT{
+    display:inline-block;
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.birthday{
+    background:#7E57C2;   /* Purple */
+    color:#fff;
+}
+
+.promo{
+    background:#E91E63;   /* Pink */
+    color:#fff;
+}
+
+.otp{
+    background:#4CAF50;   /* Green */
+    color:#fff;
+}
+
+.failure{
+    background:#F44336;   /* Red */
+    color:#fff;
+}
+
+.pgt{
+    background:#2196F3;   /* Blue */
+    color:#fff;
+}
+.break{background:#ff8900;
+    color:#000;
+}
+
+.Check{background:#6f3c00;
+    color:#000;
+}
+
+.roster{background:#012e70;
+    color:#000;
+}
+
