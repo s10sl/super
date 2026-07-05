@@ -286,8 +286,8 @@ function renderMistakes(csName) {
     container.innerHTML = `
         <div class="mistake-header">
             <div>
-                <h2>⚠ Mistakes</h2>
-                <p>Showing mistakes for the current month</p>
+        
+                <h2>Showing mistakes for the current month<h2>
             </div>
             <div class="month-badge">📅 ${runningMonth}</div>
         </div>
