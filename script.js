@@ -1,7 +1,7 @@
 // ==============================
 // Google Apps Script Web App URL
 // ==============================
-const BASE_URL = "https://script.google.com/macros/s/AKfycbyhGbyrf8mp0Mni2SL6KQJ1QQne7jFLGZcRPMs8jOcfbKp0mNUnnxOhH7Jz4c6UbCyj/exec";
+const BASE_URL = "https://script.google.com/macros/s/AKfycby2kThZAKcslw-1XJSnWyeWWDar7Vf45_vUzn6O2l9Qv6zksE7103W1TkL5D8UlGBkz/exec";
 
 // ==============================
 // Global Variables
@@ -9,6 +9,7 @@ const BASE_URL = "https://script.google.com/macros/s/AKfycbyhGbyrf8mp0Mni2SL6KQJ
 let employees = [];
 let filteredEmployees = [];
 let allData = [];
+let allLinks = [];
 let dataReady = false;
 
 // ==============================
@@ -21,23 +22,16 @@ function parseDate(value) {
         return isNaN(value.getTime()) ? null : value;
     }
 
-    if (typeof value === "string") {
-        if (value.includes("/")) {
-            value = value.replace(
-                /(\d{2})\/(\d{2})\/(\d{4})/,
-                "$3-$2-$1"
-            );
-        }
+    if (typeof value === "string" && value.includes("/")) {
+        value = value.replace(/(\d{2})\/(\d{2})\/(\d{4})/, "$3-$2-$1");
     }
 
     const d = new Date(value);
-    if (isNaN(d.getTime())) return null;
-
-    return d;
+    return isNaN(d.getTime()) ? null : d;
 }
 
 // ==============================
-// WAIT FOR DATA (IMPORTANT FIX)
+// WAIT FOR DATA
 // ==============================
 function waitForDataAndRender(name) {
     if (!dataReady) {
@@ -50,34 +44,40 @@ function waitForDataAndRender(name) {
 // ==============================
 // LOAD DATA
 // ==============================
-let allLinks = [];
+document.addEventListener("DOMContentLoaded", () => {
 
-Promise.all([
-    fetch(BASE_URL + "?type=employee").then(r => r.json()),
-    fetch(BASE_URL + "?type=links").then(r => r.json())
-])
-.then(([employeeData, linksData]) => {
+    Promise.all([
+        fetch(BASE_URL + "?type=employee").then(r => r.json()),
+        fetch(BASE_URL + "?type=links").then(r => r.json()),
+        fetch(BASE_URL + "?type=mistake").then(r => r.json())
+    ])
+    .then(([employeeData, linksData, mistakeData]) => {
 
-    employees = employeeData || [];
-    filteredEmployees = employeeData || [];
-    allLinks = linksData || [];
+        employees = employeeData || [];
+        filteredEmployees = employeeData || [];
+        allLinks = linksData || [];
+        allData = mistakeData || [];
 
-    renderLinks("BO","boLinks");
-    renderLinks("Deposit PLY","depositPlyLinks");
-    renderLinks("Deposit Sheet","depositSheetLinks");
-    renderLinks("SOP","sopLinks");
-renderLinks("Sports BO", "sportsBoLinks");
-renderLinks("Sports", "sportsGameLinks");
-    renderLinks("Other","otherLinks");
+        renderLinks("BO","boLinks");
+        renderLinks("Deposit PLY","depositPlyLinks");
+        renderLinks("Deposit Sheet","depositSheetLinks");
+        renderLinks("SOP","sopLinks");
+        renderLinks("Sports BO","sportsBoLinks");
+        renderLinks("Sports","sportsGameLinks");
+        renderLinks("Other","otherLinks");
 
-    if (employees.length > 0) {
-        showEmployeeByObject(employees[0]);
-    }
+        dataReady = true;
 
-})
-.catch(err => {
-    console.error(err);
-    alert("Unable to load Data");
+        if (employees.length > 0) {
+            renderMistakes("");
+        }
+
+    })
+    .catch(err => {
+        console.error("DATA LOAD ERROR:", err);
+        alert("Unable to load Data");
+    });
+
 });
 
 // ==============================
@@ -152,10 +152,10 @@ document.getElementById("search").addEventListener("keyup", function () {
 
     const txt = this.value.trim().toLowerCase();
 
-    if (txt === "") {
-    document.getElementById("employeeList").innerHTML = "";
-    return;
-}
+    if (!txt) {
+        document.getElementById("employeeList").innerHTML = "";
+        return;
+    }
 
     const filtered = employees.filter(emp =>
         String(emp["CS Name"] || "").toLowerCase().includes(txt)
@@ -167,7 +167,8 @@ document.getElementById("search").addEventListener("keyup", function () {
 // ==============================
 // SHOW EMPLOYEE
 // ==============================
-function showEmployeeByObject(emp) {
+function showEmployeeByObject(emp, showReport = true) {
+    if (!emp) return;
 
     const setText = (id, value) => {
         const el = document.getElementById(id);
@@ -177,22 +178,25 @@ function showEmployeeByObject(emp) {
     setText("empName", emp["CS Name"]);
     setText("empPosition", emp["STAFF Position"]);
     setText("psd", emp["PSD ID"]);
-    setText("office", emp["Office Location"] || emp["Office Locaton"]);
+    setText("office", emp["Office Location"] || emp["Office Locaton"] || "-");
     setText("teamid", emp["STAFF MS Team ID"]);
     setText("agent", emp["ICX Agent"]);
     setText("group", emp["Group"]);
 
-    document.getElementById("search").value = emp["CS Name"] || "";
-    document.getElementById("employeeList").innerHTML = "";
+    const search = document.getElementById("search");
+    if (search) search.value = emp["CS Name"] || "";
 
-    // Avatar
+    const list = document.getElementById("employeeList");
+    if (list) list.innerHTML = "";
+
+    // Avatar SAFE
     const avatar = document.getElementById("avatar");
     if (avatar) {
-        const name = emp["CS Name"] || "?";
-        avatar.innerText = name.charAt(0).toUpperCase();
+        const name = (emp?.["CS Name"] || "").trim();
+avatar.innerText = name.length ? name.charAt(0).toUpperCase() : "?";
     }
 
-    // Brands
+    // Brands (safe call assumed setBrand exists)
     setBrand("superbo", emp["Super BO"]);
     setBrand("dp", emp["DP"]);
     setBrand("kv", emp["KV"]);
@@ -207,21 +211,9 @@ function showEmployeeByObject(emp) {
     setBrand("cpc88", emp["CPC88"]);
     setBrand("deshi777", emp["Deshi777"]);
 
-    // FIXED CALL
-    fetch(
-    BASE_URL +
-    "?type=mistake&name=" +
-    encodeURIComponent(emp["CS Name"])
-)
-.then(r => r.json())
-.then(data => {
-
-    allData = data;
-    dataReady = true;
-    renderMistakes(emp["CS Name"]);
-
-})
-.catch(err => console.error(err));
+    if (showReport) {
+        renderMistakes(emp["CS Name"]);
+    }
 }
 
 // ==============================
@@ -275,13 +267,10 @@ function showPage(page, element) {
 }
 
 // ==============================
-// RENDER MISTAKES (FINAL FIX)
+// MISTAKES
 // ==============================
-
 function getRunningMonth() {
-    const now = new Date();
-
-    return now.toLocaleString("default", {
+    return new Date().toLocaleString("default", {
         month: "long",
         year: "numeric"
     });
@@ -292,146 +281,112 @@ function renderMistakes(csName) {
     const container = document.getElementById("mistakeContainer");
     if (!container) return;
 
-    container.innerHTML = "";
-
-    const cleanName = String(csName || "")
-        .trim()
-        .toLowerCase();
-
-    if (!cleanName) {
-        container.innerHTML = "<p>No employee selected</p>";
-        return;
-    }
-
     const runningMonth = getRunningMonth();
-container.innerHTML = `
-<div class="mistake-header">
-    <div>
-        <h2>⚠ Mistakes</h2>
-        <p>Showing mistakes for the current month</p>
-    </div>
 
-    <div class="month-badge">
-        📅 ${runningMonth}
-    </div>
-</div>
-`;
+    container.innerHTML = `
+        <div class="mistake-header">
+            <div>
+                <h2>⚠ Mistakes</h2>
+                <p>Showing mistakes for the current month</p>
+            </div>
+            <div class="month-badge">📅 ${runningMonth}</div>
+        </div>
+    `;
 
-    const mistakes = allData.filter(item => {
+    const cleanName = String(csName || "").trim().toLowerCase();
 
-        const itemName = String(item["CS Name"] || "")
-            .trim()
-            .toLowerCase();
-       const d = parseDate(item["Date"]);
+    let mistakes = allData.filter(item => {
+
+        const d = parseDate(item["Date"]);
         if (!d) return false;
-       const itemMonth = d.toLocaleString("default", {
+
+        const itemMonth = d.toLocaleString("default", {
             month: "long",
             year: "numeric"
         });
 
-        return (
-            itemName === cleanName &&
-            itemMonth === runningMonth
-        );
+        const itemName = String(item["CS Name"] || "").trim().toLowerCase();
+
+        const matchName = !csName || itemName === cleanName;
+
+        return matchName && itemMonth === runningMonth;
     });
 
-    if (mistakes.length === 0) {
-    container.innerHTML += `
-        <p class="no-data">
-            No mistakes found for ${runningMonth}
-        </p>
-    `;
-    return;
-}
+    mistakes.sort((a, b) => parseDate(b["Date"]) - parseDate(a["Date"]));
 
-container.innerHTML += mistakes.map(item => {
+    if (!mistakes.length) {
+        container.innerHTML += `<p class="no-data">No mistakes found for ${runningMonth}</p>`;
+        return;
+    }
 
-    const date = parseDate(item["Date"]);
+    const html = mistakes.map(item => {
 
-    const badgeColor = {
-        "Wrong Information": "wrong-information",
-        "Not Follow SOP": "not-follow-sop",
-        "Late Reply": "late-reply",
-        "No Reply": "no-reply",
-        "Angry With Player": "angry-player",
-        "Non Professional": "non-professional",
-        "No solution": "no-solution",
-        "No explanation": "no-explanation",
-        "Verbal warning": "verbal-warning",
-        "Warning letter": "warning-letter"
-    };
+        const date = parseDate(item["Date"]);
 
-    const colorClass = badgeColor[item["Subject"]] || "default";
+        const badgeColor = {
+            "Wrong Information": "wrong-information",
+            "Not Follow SOP": "not-follow-sop",
+            "Late Reply": "late-reply",
+            "No Reply": "no-reply",
+            "Angry With Player": "angry-player",
+            "Non Professional": "non-professional",
+            "No solution": "no-solution",
+            "No explanation": "no-explanation",
+            "Verbal warning": "verbal-warning",
+            "Warning letter": "warning-letter"
+        };
 
-    return `
-    <div class="mistake-card ${colorClass}">
+        const colorClass = badgeColor[item["Subject"]] || "default";
 
-        <div class="card-top">
+        return `
+        <div class="mistake-card ${colorClass}">
+            <div class="card-top">
+                <span class="subject">${item["Subject"]}</span>
+                <span class="date">📅 ${date ? date.toLocaleDateString("en-GB") : "-"}</span>
+            </div>
 
-            <span class="subject ${colorClass}">
-                ${item["Subject"]}
-            </span>
+            <p class="remarks"><strong>REMARKS:</strong> ${item["Detailed Remark"] || "-"}</p>
+            <hr>
 
-            <span class="date ${colorClass}">
-                📅 ${date ? date.toLocaleDateString("en-GB") : "-"}
-            </span>
-
+            <p class="link">
+                ${item["Screenshot link"]
+                    ? `<a href="${item["Screenshot link"]}" target="_blank">View Screenshot</a>`
+                    : "No Screenshot"}
+            </p>
         </div>
+        `;
+    }).join("");
 
-        <p class="remarks">
-            <strong>REMARKS:</strong>
-            ${item["Detailed Remark"] || "-"}
-        </p>
+    container.innerHTML += html;
 
-        <hr>
-
-        <p class="link">
-            🔗
-            ${
-                item["Screenshot link"]
-                ? `<a href="${item["Screenshot link"]}" target="_blank">View Screenshot</a>`
-                : "No Screenshot"
-            }
-        </p>
-
-    </div>
+    container.innerHTML += `
+        <div class="end-list">
+            <hr><span>ⓘ End of list</span><hr>
+        </div>
     `;
-
-}).join("");
-
-container.innerHTML += `
-<div class="end-list">
-    <hr>
-    <span>ⓘ End of list</span>
-    <hr>
-</div>
-`;
 }
 
 // ==============================
-// New 
+// LINKS
 // ==============================
-function renderLinks(category, containerId, type = null) {
+function renderLinks(category, containerId) {
 
     const container = document.getElementById(containerId);
     if (!container) return;
 
     container.innerHTML = "";
 
-allLinks
-    .filter(item =>
-        item.Category === category &&
-        String(item.Active).toUpperCase() === "TRUE"
-    )
-    .forEach(item => {
+    allLinks
+        .filter(item =>
+            item.Category === category &&
+            String(item.Active).toUpperCase() === "TRUE"
+        )
+        .forEach(item => {
 
-        container.innerHTML += `
-            <div class="link-card ${item.Color}">
-                <a href="${item.URL}" target="_blank">
-                    ${item.Name}
-                </a>
-            </div>
-        `;
-
-    });
+            container.innerHTML += `
+                <div class="link-card ${item.Color}">
+                    <a href="${item.URL}" target="_blank">${item.Name}</a>
+                </div>
+            `;
+        });
 }
