@@ -281,18 +281,7 @@ function renderMistakes(csName) {
     const container = document.getElementById("mistakeContainer");
     if (!container) return;
 
-    const runningMonth = getRunningMonth();
-
-    container.innerHTML = `
-        <div class="mistake-header">
-            <div>
-        
-                <h2>Showing mistakes for the current month<h2>
-            </div>
-            <div class="month-badge">📅 ${runningMonth}</div>
-        </div>
-    `;
-
+    const runningMonth = getRunningMonth();   // <-- এটা যোগ করো
     const cleanName = String(csName || "").trim().toLowerCase();
 
     let mistakes = allData.filter(item => {
@@ -314,8 +303,34 @@ function renderMistakes(csName) {
 
     mistakes.sort((a, b) => parseDate(b["Date"]) - parseDate(a["Date"]));
 
+    // এখন header বানাবে
+    container.innerHTML = `
+    <div class="mistake-header">
+
+        <div>
+            <h2>Showing mistakes for the current month</h2>
+        </div>
+
+        <div style="display:flex;gap:10px;align-items:center;">
+
+            <div class="count-badge">
+                📊 ${mistakes.length} Reports
+            </div>
+
+            <div class="month-badge">
+                📅 ${runningMonth}
+            </div>
+
+        </div>
+
+    </div>
+    `;
+
     if (!mistakes.length) {
-        container.innerHTML += `<p class="no-data">No mistakes found for ${runningMonth}</p>`;
+        container.innerHTML += `
+            <p class="no-data">
+                No mistakes found for ${runningMonth}
+            </p>`;
         return;
     }
 
