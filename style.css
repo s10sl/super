@@ -832,3 +832,13 @@ body{
     color:#000;
 }
 
+.count-badge{
+    background:#fff3cd;
+    color:#b26a00;
+    padding:10px 18px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:15px;
+    box-shadow:0 4px 10px rgba(0,0,0,.08);
+}
+
