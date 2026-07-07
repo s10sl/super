@@ -355,21 +355,36 @@ function renderMistakes(csName) {
 
         return `
         <div class="mistake-card ${colorClass}">
-            <div class="card-top">
-                <span class="subject">${item["Subject"]}</span>
-                <span class="date">📅 ${date ? date.toLocaleDateString("en-GB") : "-"}</span>
-            </div>
 
-            <p class="remarks"><strong>REMARKS:</strong> ${item["Detailed Remark"] || "-"}</p>
-            <hr>
 
-            <p class="link">
-                ${item["Screenshot link"]
-                    ? `<a href="${item["Screenshot link"]}" target="_blank">View Screenshot</a>`
-                    : "No Screenshot"}
-            </p>
-        </div>
-        `;
+
+    ${!csName ? `
+    <p class="cs-name">
+        👤 <strong>${item["CS Name"]}</strong>
+    </p>
+    ` : ""}
+    <div class="card-top">
+        <span class="subject">${item["Subject"]}</span>
+        <span class="date">📅 ${date ? date.toLocaleDateString("en-GB") : "-"}</span>
+    </div>
+
+    <p class="remarks">
+        <strong>REMARKS:</strong>
+        ${item["Detailed Remark"] || "-"}
+    </p>
+
+    <hr>
+
+    <p class="link">
+        ${
+            item["Screenshot link"]
+            ? `<a href="${item["Screenshot link"]}" target="_blank">View Screenshot</a>`
+            : "No Screenshot"
+        }
+    </p>
+
+</div>
+`;
     }).join("");
 
     container.innerHTML += html;
